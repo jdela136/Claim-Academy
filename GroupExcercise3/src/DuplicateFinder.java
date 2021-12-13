@@ -24,7 +24,7 @@ public class DuplicateFinder {
 		int index = 0;
 		for(int i = 0; i < arr.length; i++) {
 			int duplicate = 0;
-			for(int j = 0; j < arr.length; j++) {
+			for(int j = i; j < arr.length; j++) {
 				if(arr[i] == arr[j]) {
 					duplicate++;
 				}
