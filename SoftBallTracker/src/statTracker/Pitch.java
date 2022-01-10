@@ -5,18 +5,16 @@ public class Pitch {
 	private int id;
 	private static int balls;
 	private static int strikes;
-	private boolean ballInPlay;
 	
 	public Pitch() {
 		balls = 1;
 		strikes = 1;
-		ballInPlay = false;
 	}
 	
-//	public Pitch(int balls, int strikes) {
-//		this.balls = balls;
-//		this.strikes = strikes;
-//	}
+	public Pitch(int balls, int strikes) {
+		Pitch.balls = balls;
+		Pitch.strikes = strikes;
+	}
 
 	public int getId() {
 		return id;
@@ -42,12 +40,4 @@ public class Pitch {
 		Pitch.strikes = strikes;
 	}
 
-	public boolean isBallInPlay() {
-		return ballInPlay;
-	}
-
-	public void setBallInPlay(boolean ballInPlay) {
-		this.ballInPlay = ballInPlay;
-	}
-	
 }

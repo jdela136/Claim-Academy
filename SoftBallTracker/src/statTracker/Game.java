@@ -5,45 +5,45 @@ import java.util.List;
 
 public class Game {
 	private int id;
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	private Team home;
-	private Team away;
+	private List<Team> teams;
 	private int homeScore;
 	private int awayScore;
 	private List<Inning> innings;
 	
 	public Game() {
-		homeScore = 0;
-		awayScore = 0;
+		teams = new ArrayList<Team>(2);
 		innings =  new ArrayList<Inning>();
 	}
+	
 	public Game(Team home, Team away) {
-		this.home = home;
-		this.away = away;
+		teams = new ArrayList<Team>(2);
+		teams.add(away);
+		teams.add(home);
 		homeScore = 0;
 		awayScore = 0;
 		innings =  new ArrayList<Inning>();
 	}
-	public Team getHome() {
-		return home;
+	
+
+	public int getId() {
+		return id;
 	}
-	public void setHome(Team home) {
-		this.home = home;
+	
+	public void setId(int id) {
+		this.id = id;
 	}
-	public Team getAway() {
-		return away;
+	
+	public List<Team> getTeams() {
+		return teams;
 	}
-	public void setAway(Team away) {
-		this.away = away;
+	public void setTeams(List<Team> teams) {
+		this.teams = teams;
 	}
+	
 	public int getHomeScore() {
 		return homeScore;
 	}
+	
 	public void setHomeScore(int homeScore) {
 		this.homeScore = homeScore;
 	}
@@ -60,6 +60,14 @@ public class Game {
 		this.innings = innings;
 	}
 	
+//	public void addToLineUp(Team team, Player player) {
+//		if(team == teams.get(0)) {
+//			awayBatters.add(player);			
+//		}
+//		else {
+//			homeBatters.add(player);
+//		}
+//	}
 	
 	
 }

@@ -14,8 +14,8 @@ public class Team {
 	private List<Player> lineUp;
 	
 	public Team() {
-		int wins = 0;
-		int losses = 0;
+		wins = 0;
+		losses = 0;
 		roster = new ArrayList<Player>();
 		lineUp = new ArrayList<Player>();
 	}
@@ -75,6 +75,5 @@ public class Team {
 	public void setLineUp(List<Player> lineUp) {
 		this.lineUp = lineUp;
 	}
-	
 	
 }
