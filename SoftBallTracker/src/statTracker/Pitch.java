@@ -3,17 +3,14 @@ package statTracker;
 public class Pitch {
 	
 	private int id;
-	private static int balls;
-	private static int strikes;
+	private  int balls;
+	private  int strikes;
 	
-	public Pitch() {
-		balls = 1;
-		strikes = 1;
-	}
+	public Pitch() {}
 	
 	public Pitch(int balls, int strikes) {
-		Pitch.balls = balls;
-		Pitch.strikes = strikes;
+		this.balls = balls;
+		this.strikes = strikes;
 	}
 
 	public int getId() {
@@ -29,7 +26,7 @@ public class Pitch {
 	}
 
 	public void setBalls(int balls) {
-		Pitch.balls = balls;
+		this.balls = balls;
 	}
 
 	public int getStrikes() {
@@ -37,7 +34,15 @@ public class Pitch {
 	}
 
 	public void setStrikes(int strikes) {
-		Pitch.strikes = strikes;
+		this.strikes = strikes;
+	}
+	
+
+	@Override
+	public String toString() {
+		return "Pitch [id=" + id + "Strikes: " + strikes + "Balls " + balls;
 	}
 
+	
+	
 }

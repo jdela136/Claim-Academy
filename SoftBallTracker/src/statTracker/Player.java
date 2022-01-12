@@ -4,7 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
+	private int id;
+	
+	private String firstName;
+	
+	private String lastName;
+	
+	private int lineUpId;
+	
 	private List<AtBat> atBats;
+	
+	private int number;
 	
 	private int strikeouts;
 	
@@ -26,16 +36,25 @@ public class Player {
 
 	public Player() {
 		atBats = new ArrayList<AtBat>();
-		strikeouts = 0;
-		walks = 0;
-		runs = 0;
-		rbis = 0;
-		hits = 0;
-		singles = 0;
-		doubles = 0;
-		triples = 0;
-		homeruns = 0;
+//		strikeouts = 0;
+//		walks = 0;
+//		runs = 0;
+//		rbis = 0;
+//		hits = 0;
+//		singles = 0;
+//		doubles = 0;
+//		triples = 0;
+//		homeruns = 0;
 	}
+	
+
+	public Player(int id, String firstName, String lastName) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
+
 
 	public List<AtBat> getAtBats() {
 		return atBats;
@@ -116,6 +135,58 @@ public class Player {
 	public void setHits(int hits) {
 		this.hits = hits;
 	}
+
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getLineUpId() {
+		return lineUpId;
+	}
+
+	public void setLineUpId(int battingId) {
+		this.lineUpId = battingId;
+	}
+	
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Player [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", lineUpId=" + lineUpId
+				+ ", atBats=" + atBats + ", number=" + number + ", strikeouts=" + strikeouts + ", walks=" + walks
+				+ ", runs=" + runs + ", rbis=" + rbis + ", hits=" + hits + ", singles=" + singles + ", doubles="
+				+ doubles + ", triples=" + triples + ", homeruns=" + homeruns + "]";
+	}
+
+	
 	
 	
 }
