@@ -40,9 +40,7 @@ public class Pitch {
 
 	@Override
 	public String toString() {
-		return "Pitch [id=" + id + "Strikes: " + strikes + "Balls " + balls;
+		return "Id: " + id + " Balls: " + balls + " Strikes " + strikes;
 	}
 
-	
-	
 }

@@ -14,8 +14,8 @@ public class Application {
 		one.setId(1);
 		a.addPlayerToRoster(one);
 		Player two = new Player();
-		two.setFirstName("J");
-		two.setLastName("D");
+		two.setFirstName("Denise");
+		two.setLastName("Feierabend");
 		two.setId(2);
 		a.addPlayerToRoster(two);
 		Player three = new Player(3, "A", "B");
@@ -28,7 +28,7 @@ public class Application {
 		a.addPlayerToRoster(six);
 		Player seven = new Player(7, "David", "Ortiz");
 		a.addPlayerToRoster(seven);
-		Player eight = new Player(8, "Eddie", "Guerrero");
+		Player eight = new Player(8, "Jonathan", "De La Cruz");
 		a.addPlayerToRoster(eight);
 		Player nine = new Player(9, "Angel", "Garza");
 		a.addPlayerToRoster(nine);
@@ -71,34 +71,44 @@ public class Application {
 				nineteen, twenty);
 		game.setId(1);
 		game.startGame();
+		
+		//System.out.println(game.getAtBats().get(0).toString());
+		//System.out.println(game.nextBatter());
 
 		while (!game.isEndGame()) {
-			System.out.println("1- strike, 2- ball, 3-hit, 4-out");
+			System.out.println("1- strike, 2- ball, 3-hit, 4-out, 5-moveRunner");
+			System.out.println(game.batterUp());
 			Scanner in = new Scanner(System.in);
 			int choice = in.nextInt();
 			switch (choice) {
 			case 1:
+				System.out.println("\nResults\n");
 				if (!game.getLastAtBat().isEndAtBat()) {
-					game.getLastAtBat().addStrike();
-					System.out.println(game.getLastAtBat().getLastPitch().toString());
-					System.out.println(game.getLastAtBat().toString());
+//					game.getLastAtBat().addStrike();
+//					System.out.println(game.getLastAtBat().getLastPitch().toString());
+//					System.out.println(game.getLastAtBat().toString());
+//					System.out.println(game.nextBatter());
 				} else {
 					game.addAtBat();
 					game.getLastAtBat().addStrike();
-					System.out.println(game.getLastAtBat().getLastPitch().toString());
-					System.out.println(game.getLastAtBat().toString());
+//					System.out.println(game.getLastAtBat().getLastPitch().toString());
+//					System.out.println(game.getLastAtBat().toString());
+//					System.out.println(game.nextBatter());
 				}
+				
 				break;
 			case 2:
 				if (!game.getLastAtBat().isEndAtBat()) {
 					game.getLastAtBat().addBall();
-					System.out.println(game.getLastAtBat().getLastPitch().toString());
-					System.out.println(game.getLastAtBat().toString());
+//					System.out.println(game.getLastAtBat().getLastPitch().toString());
+//					System.out.println(game.getLastAtBat().toString());
+//					System.out.println(game.nextBatter());
 				} else {
 					game.addAtBat();
 					game.getLastAtBat().addBall();
-					System.out.println(game.getLastAtBat().getLastPitch().toString());
-					System.out.println(game.getLastAtBat().toString());
+//					System.out.println(game.getLastAtBat().getLastPitch().toString());
+//					System.out.println(game.getLastAtBat().toString());
+//					System.out.println(game.nextBatter());
 				}
 				break;
 			case 3:
@@ -137,9 +147,10 @@ public class Application {
 						break;
 					}
 				}
-				System.out.println(game.getLastAtBat().getLastPitch().toString());
-				System.out.println(game.getLastAtBat().toString());
-				System.out.println("Final Score: " + game.getAwayTeam() + ": " + game.getAwayScore() + " " + game.getHomeTeam() + ": " + game.getHomeScore() );
+				//game.addAtBatToLastBatter();
+//				System.out.println(game.getLastAtBat().getLastPitch().toString());
+//				System.out.println(game.getLastAtBat().toString());
+//				System.out.println(game.nextBatter());
 				break;
 			case 4:
 				if (!game.getLastAtBat().isEndAtBat()) {
@@ -148,8 +159,9 @@ public class Application {
 					game.addAtBat();
 					game.getLastAtBat().outMade();
 				}
-				System.out.println(game.getLastAtBat().getLastPitch().toString());
-				System.out.println(game.getLastAtBat().toString());
+//				System.out.println(game.getLastAtBat().getLastPitch().toString());
+//				System.out.println(game.getLastAtBat().toString());
+//				System.out.println(game.nextBatter());
 				break;
 			case 5:
 				System.out.println("What batter");
@@ -158,12 +170,19 @@ public class Application {
 				System.out.println("Where does he end");
 				int base = in2.nextInt();
 				game.getLastAtBat().moveRunner(base, batter);
-				System.out.println(game.getLastAtBat().toString());
+//				System.out.println(game.getLastAtBat().toString());
+//				System.out.println(game.nextBatter());
 				break;
 			default:
 				game.setEndGame(true);
-				System.out.println("Final Score: " + game.getAwayTeam() + ": " + game.getAwayScore() + " " + game.getHomeTeam() + ": " + game.getHomeScore() );
+				break;
 			}
+			game.calculateScore();
+			game.addAtBatToLastBatter();
+			System.out.println(game.getLastAtBat().getLastPitch().toString());
+			System.out.println(game.getLastAtBat().toString());
+			//System.out.println(game.nextBatter());
+			System.out.println("\nFinal Score: " + game.getAwayTeam() + ": " + game.getAwayScore() + " " + game.getHomeTeam() + ": " + game.getHomeScore() + "\n");
 		}
 
 	}

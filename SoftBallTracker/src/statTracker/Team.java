@@ -116,11 +116,20 @@ public class Team {
 		nine.setLineUpId(9);
 		ten.setLineUpId(10);
 	}
+	
+	public int getLineUpSize() {
+		int size = 0;
+		for (Player player : roster) {
+			if(player.getLineUpId() > size) {
+				size = player.getLineUpId();
+			}
+		}
+		return size;
+	}
 
 	@Override
 	public String toString() {
-		return "Team [id=" + id + ", teamName=" + teamName + ", wins=" + wins + ", losses=" + losses + ", coach="
-				+ coach;
+		return "Id=" + id + " Team Name: " + teamName + " Wins: " + wins + " Losses=" + losses;
 	}
 
 	public Team(int id, String teamName, int wins, int losses, Coach coach, List<Player> roster) {

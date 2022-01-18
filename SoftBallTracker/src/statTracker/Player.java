@@ -33,6 +33,10 @@ public class Player {
 	private int triples;
 	
 	private int homeruns;
+	
+	private int trueAtBats;
+	
+	private double average;
 
 	public Player() {
 		atBats = new ArrayList<AtBat>();
@@ -47,8 +51,10 @@ public class Player {
 //		homeruns = 0;
 	}
 	
+	
 
 	public Player(int id, String firstName, String lastName) {
+		atBats = new ArrayList<AtBat>();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -178,15 +184,67 @@ public class Player {
 
 
 
+//	@Override
+//	public String toString() {
+//		return "Id: " + id + " FirstName: " + firstName + " LastName: " + lastName + " LineUpId: " + lineUpId;
+//	}
+
 	@Override
 	public String toString() {
-		return "Player [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", lineUpId=" + lineUpId
-				+ ", atBats=" + atBats + ", number=" + number + ", strikeouts=" + strikeouts + ", walks=" + walks
-				+ ", runs=" + runs + ", rbis=" + rbis + ", hits=" + hits + ", singles=" + singles + ", doubles="
-				+ doubles + ", triples=" + triples + ", homeruns=" + homeruns + "]";
+		int ab = getTrueAtBats();
+		double avg = getAverage();
+		return "Id: " + id + " FirstName=" + firstName + " LastName: " + lastName + " LineUpId: " + lineUpId
+				+ " Average: " + avg + " AB: " + ab + " Strikeouts: " + strikeouts + " Walks: " + walks
+				+ " Runs: " + runs + " Rbis: " + rbis + " Hits: " + hits + " Singles: " + singles + " Doubles: "
+				+ doubles + " Triples: " + triples + " Homeruns: " + homeruns;
 	}
 
+
+	public void setTrueAtBats(int trueAtBats) {
+		this.trueAtBats = trueAtBats;
+	}
+
+
+	public void setAverage(double average) {
+		this.average = average;
+	}
 	
+	public int getTrueAtBats() {
+//		if (atBats.isEmpty()) {
+//			return walks;
+//		} else {
+//			return atBats.size() - walks;
+//		}
+		try {
+			trueAtBats = atBats.size() - walks;
+		}
+		catch(NullPointerException e) {
+			trueAtBats = walks;
+		}
+		
+		return trueAtBats;
+	}
+
+	public double getAverage() {
+//		if (atBats.isEmpty()) {
+//			return 0;
+//		} else {
+//			return hits / atBats.size();
+//		}		
+		try {
+			average = (double) hits / trueAtBats;
+		}
+		catch(NullPointerException e) {
+			average = 0;
+		}
+		catch(ArithmeticException e) {
+			average = 0;
+		}
+		
+		return average;
+	}
 	
-	
+	public void addAtBat(AtBat ab) {
+		atBats.add(ab);
+	}
 }

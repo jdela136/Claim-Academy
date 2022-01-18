@@ -41,6 +41,24 @@ public class AtBat {
 		return outs;
 	}
 
+	public int getViewOuts() {
+		if (outs < 3) {
+			return outs;
+		} else if (outs == 3) {
+			if (isEndAtBat()) {
+				return 3;
+			} else {
+				return 0;
+			}
+		} else if (outs == 4) {
+			return 1;
+		} else if (outs == 5) {
+			return 2;
+		} else {
+			return 3;
+		}
+	}
+
 	public void setOuts(int outs) {
 		this.outs = outs;
 	}
@@ -148,7 +166,7 @@ public class AtBat {
 
 	public void outMade() {
 		if (getPitches().size() == 0) {
-			Pitch firstPitch = new Pitch(1,1);
+			Pitch firstPitch = new Pitch(1, 1);
 			firstPitch.setId(1);
 			getPitches().add(firstPitch);
 			setOuts(getOuts() + 1);
@@ -212,7 +230,7 @@ public class AtBat {
 				battersOnBase.get(runnerBase).setRuns(battersOnBase.get(runnerBase).getRuns() + 1);
 				battersOnBase.get(0).setRbis(battersOnBase.get(0).getRbis() + 1);
 				setRunsScored(getRunsScored() + 1);
-				if(runnerBase != 0) {
+				if (runnerBase != 0) {
 					battersOnBase.set(runnerBase, null);
 				}
 			} else {
@@ -229,8 +247,8 @@ public class AtBat {
 			if (battersOnBase.get(i) != null) {
 				if (i == bases) {
 					moveRunner(i + 1, i);
-				} 
-				if(i < bases) {
+				}
+				if (i < bases) {
 					moveRunner(i + bases, i);
 				}
 			}
@@ -249,10 +267,16 @@ public class AtBat {
 		return pitches.get(pitches.size() - 1);
 	}
 
+	public Player getBatterUp() {
+		return battersOnBase.get(0);
+	}
+
 	@Override
 	public String toString() {
-		return "AtBat [id=" + id + ", outs=" + outs + ", runsScored=" + runsScored + ", battersOnBase=" + battersOnBase
-				+ ", awayIndex=" + awayIndex + ", homeIndex=" + homeIndex + ", inningNum=" + inningNum + "]";
+		return "Inning: " + inningNum + " Id: " + id + " Outs=" + getViewOuts() + " RunsScored=" + runsScored
+				+ " AwayIndex=" + awayIndex + " HomeIndex=" + homeIndex + "\nLast Batter: " + battersOnBase.get(0).toString()
+				+ "\n1st: " + battersOnBase.get(1) + "\n2nd: " + battersOnBase.get(2) + "\n3rd: "
+				+ battersOnBase.get(3);
 	}
 
 }
