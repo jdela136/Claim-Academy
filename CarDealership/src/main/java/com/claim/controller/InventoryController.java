@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.claim.entity.Inventory;
@@ -50,7 +51,7 @@ public class InventoryController {
 		return new ModelAndView("/inventory-car", "inventoryCar", new Inventory());
 	}
 	
-	@PostMapping("/inventory-car/{id}")
+	@PutMapping("/inventory-car/{id}")
 	public String bid(Model model, @ModelAttribute("inventoryCar") Inventory car, HttpSession session, @PathVariable Integer id) {
 		service.bid(car.getPrice(), id);
 		return "/inventory-car/{id}";
