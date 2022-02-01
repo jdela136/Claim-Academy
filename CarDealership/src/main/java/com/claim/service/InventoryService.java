@@ -1,5 +1,6 @@
 package com.claim.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.claim.entity.Car;
 import com.claim.entity.Inventory;
+import com.claim.entity.Sale;
 import com.claim.repository.CarRepository;
 import com.claim.repository.InventoryRepository;
 
@@ -29,6 +31,12 @@ public class InventoryService {
 					&& car.getYear().equals(inventory.getCar().getYear())) {
 				inventory.setCar(car);
 			}
+		}
+		if(inventory.getPurchaseDate().isBefore(LocalDate.now().minusDays(120))) {
+			inventory.setIsBiddable(true);
+		}
+		else {
+			inventory.setIsBiddable(false);
 		}
 		inventoryRepository.save(inventory);
 	}
@@ -62,10 +70,29 @@ public class InventoryService {
 	public void bid(Double bid, Integer id) {
 		Inventory car = getInventoryCarbyId(id);
 		Double max = car.getPrice() - (car.getPrice() * .1);
-		if(car.getPurchaseDate().isBefore(car.getPurchaseDate().minusDays(120))){
-			if(bid < max) {
+		if(car.getIsBiddable()){
+			if(bid > max) {
 				car.setPrice(bid);
+				inventoryRepository.save(car);
 			}
 		}
+	}
+	
+	public void addSale(Sale sale, Integer id) {
+		Inventory car = getInventoryCarbyId(id);
+		car.setSale(sale);
+		car.getSale().setPurchaseDate(LocalDate.now());
+		inventoryRepository.save(car);
+	}
+	
+	public List<Inventory> getSales() {
+		List<Inventory> inventory = inventoryRepository.findAll();
+		List<Inventory> temp = new ArrayList<Inventory>();
+		for(Inventory car : inventory) {
+			if(car.getSale() != null) {
+				temp.add(car);
+			}
+		}
+		return temp;
 	}
 }

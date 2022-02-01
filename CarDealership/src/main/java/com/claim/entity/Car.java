@@ -32,12 +32,12 @@ public class Car {
     private String build;
 	
 	@Column(name="image")
-    private SerialBlob image;
+    private String image;
 	
 
 	public Car() {}
 	
-	public Car(Integer id, String make, String model, Integer year, String build, SerialBlob image) {
+	public Car(Integer id, String make, String model, Integer year, String build, String image) {
 		this.id = id;
 		this.make = make;
 		this.model = model;
@@ -86,11 +86,11 @@ public class Car {
 		this.build = build;
 	}
 
-	public SerialBlob getImage() {
+	public String getImage() {
 		return image;
 	}
 
-	public void setImage(SerialBlob image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 

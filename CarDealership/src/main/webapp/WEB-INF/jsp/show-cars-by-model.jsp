@@ -48,7 +48,7 @@
 				<nav class="nav nav-masthead justify-content-center">
 					<a class="nav-link active" href="/">Inventory</a><a
 						class="nav-link" href="/add-to-inventory">Add Car</a> <a
-						class="nav-link" href="">Sale Center</a>
+						class="nav-link" href="display-sales">Sale Center</a>
 				</nav>
 			</div>
 		</header>
@@ -89,11 +89,11 @@
 						<c:forEach items="${cars}" var="car">
 							<tr>
 								<td class="w-25"><img
-									src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/sheep-3.jpg"
-									class="img-fluid img-thumbnail" alt="Sheep"></td>
+									src="${car.car.image}"
+									class="img-fluid img-thumbnail"></td>
 								<td>${car.car.make} ${car.car.model}</td>
 								<td>${car.type}</td>
-								<td><button type="submit" class="btn btn-primary">View Here</button></td>
+								<td><a class="btn btn-primary" href="/inventory-car/${car.id}" role="button">View Here</a></td>
 							</tr>
 						</c:forEach>
 					</tbody>

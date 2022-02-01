@@ -40,6 +40,9 @@ public class Inventory {
 	@Column(name="description")
     private String description;
 	
+	@Column(name="is_biddable")
+	private Boolean isBiddable;
+	
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="car_id")
  	private Car car;
@@ -127,4 +130,14 @@ public class Inventory {
 	public void setSale(Sale sale) {
 		this.sale = sale;
 	}
+
+	public Boolean getIsBiddable() {
+		return isBiddable;
+	}
+
+	public void setIsBiddable(Boolean isBiddable) {
+		this.isBiddable = isBiddable;
+	}
+	
+	
 }

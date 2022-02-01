@@ -41,7 +41,7 @@
 
 
 <body class="text-center">
-	<div class="cover-container d-flex w-100 h-25 p-3 mx-auto flex-column">
+	<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
 		<header class="masthead mb-auto">
 			<div class="inner">
 				<h3 class="masthead-brand">Car Dealership</h3>
@@ -52,54 +52,31 @@
 				</nav>
 			</div>
 		</header>
-		<br /> <br />
-		<!--    <main role="main" class="inner cover"> -->
-		<h1 class="cover-heading">Inventory</h1>
-		<div class="main-search-input-wrap">
-			<div class="main-search-input fl-wrap">
-				<div class="main-search-input-item">
-					<form:form modelAttribute="model" action="/inventory" method="post">
-						<form:input type="text" path="car.model" placeholder="Search by Model" />
-						<button class="main-search-button">Search</button>
-					</form:form>
-				</div>
-			</div>
-		</div>
 
-		<!--     </main> -->
+		<main role="main" class="inner cover">
+
+
+			<form:form modelAttribute="sale" action="/sell-car/${id}"
+				method="post">
+
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="inputFirstName">Buyer First Name</label>
+						<form:input path="firstName" type="text" class="form-control"
+							id="inputFirstName" />
+					</div>
+					<div class="form-group col-md-6">
+						<label for="inputlastName">Buyer Last Name</label>
+						<form:input path="lastName" type="text" class="form-control"
+							id="inputlastName" />
+					</div>
+				</div>
+				<button type="submit" class="btn btn-primary">Sell</button>
+			</form:form>
+		</main>
 	</div>
-	<br />
-	<br />
-	<br />
-	<br />
-	<div class="container">
-		<div class="row">
-			<div class="col-12">
-				<table class="table table-image">
-					<thead>
-						<tr>
-							<th scope="col">Image</th>
-							<th scope="col">Car</th>
-							<th scope="col">Type</th>
-							<th scope="col">Details</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach items="${cars}" var="car">
-							<tr>
-								<td class="w-25"><img
-									src="${car.car.image}"
-									class="img-fluid img-thumbnail"></td>
-								<td>${car.car.make} ${car.car.model}</td>
-								<td>${car.type}</td>
-								<td><a class="btn btn-primary" href="/inventory-car/${car.id}" role="button">View Here</a></td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
+
+
 </body>
 
 </html>

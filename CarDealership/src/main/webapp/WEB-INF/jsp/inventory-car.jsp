@@ -104,7 +104,7 @@ body {
 				<nav class="nav nav-masthead justify-content-center">
 					<a class="nav-link active" href="/">Inventory</a><a
 						class="nav-link" href="/add-to-inventory">Add Car</a> <a
-						class="nav-link" href="">Sale Center</a>
+						class="nav-link" href="display-sales">Sale Center</a>
 				</nav>
 			</div>
 		</header>
@@ -113,7 +113,7 @@ body {
 			<div class="col-lg-8 border p-3 main-section bg-white">
 				<div class="row m-0">
 					<div class="col-lg-4 left-side-product-box pb-3">
-						<img src="http://nicesnippets.com/demo/pd-image1.jpg"
+						<img src="${car.car.image}"
 							class="border p-3">
 					</div>
 					<div class="col-lg-8">
@@ -136,13 +136,20 @@ body {
 									<p>Added to inventory: ${car.purchaseDate}</p>
 									<hr class="m-0 pt-2 mt-2">
 								</div>
-								<form:form modelAttribute="inventoryCar"
-									action="/inventory-car/${id}" method="post">
-									<label for="inputPrice">Bid Price</label>
-									<form:input path="price" type="price" class="form-control"
-										id="inputPrice" />
-									<button type="submit" class="btn btn-primary">Make Bid</button>
-								</form:form>
+								<c:choose>
+									<c:when test="${car.isBiddable == true}">
+										<form:form modelAttribute="inventoryCar"
+											action="/inventory-car/${id}" method="post">
+											<label for="inputPrice">Bid Price</label>
+											<form:input path="price" type="price" class="form-control"
+												id="inputPrice" />
+											<button type="submit" class="btn btn-primary">Make
+												Bid</button>
+										</form:form>
+									</c:when>
+								</c:choose>
+								<a class="btn btn-danger" href="/sell-car/${id}" role="button">Sell
+									Car</a>
 							</div>
 						</div>
 					</div>

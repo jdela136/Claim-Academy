@@ -54,17 +54,7 @@
 		</header>
 		<br /> <br />
 		<!--    <main role="main" class="inner cover"> -->
-		<h1 class="cover-heading">Inventory</h1>
-		<div class="main-search-input-wrap">
-			<div class="main-search-input fl-wrap">
-				<div class="main-search-input-item">
-					<form:form modelAttribute="model" action="/inventory" method="post">
-						<form:input type="text" path="car.model" placeholder="Search by Model" />
-						<button class="main-search-button">Search</button>
-					</form:form>
-				</div>
-			</div>
-		</div>
+		<h1 class="cover-heading">Sales</h1>
 
 		<!--     </main> -->
 	</div>
@@ -78,21 +68,17 @@
 				<table class="table table-image">
 					<thead>
 						<tr>
-							<th scope="col">Image</th>
 							<th scope="col">Car</th>
-							<th scope="col">Type</th>
-							<th scope="col">Details</th>
+							<th scope="col">Customer</th>
+							<th scope="col">Price</th>
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${cars}" var="car">
+						<c:forEach items="${sales}" var="car">
 							<tr>
-								<td class="w-25"><img
-									src="${car.car.image}"
-									class="img-fluid img-thumbnail"></td>
-								<td>${car.car.make} ${car.car.model}</td>
-								<td>${car.type}</td>
-								<td><a class="btn btn-primary" href="/inventory-car/${car.id}" role="button">View Here</a></td>
+								<td>${car.type} ${car.car.year} ${car.car.make} ${car.car.model}</td>
+								<td>${car.sale.firstName} ${car.sale.lastName}</td>
+								<td>${car.price}</td>
 							</tr>
 						</c:forEach>
 					</tbody>

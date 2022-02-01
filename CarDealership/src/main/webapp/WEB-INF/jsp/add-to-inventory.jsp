@@ -48,7 +48,7 @@
 				<nav class="nav nav-masthead justify-content-center">
 					<a class="nav-link active" href="/">Inventory</a><a
 						class="nav-link" href="/add-to-inventory">Add Car</a> <a
-						class="nav-link" href="">Sale Center</a>
+						class="nav-link" href="display-sales">Sale Center</a>
 				</nav>
 			</div>
 		</header>

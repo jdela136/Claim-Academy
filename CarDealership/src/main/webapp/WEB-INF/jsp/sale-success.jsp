@@ -54,8 +54,8 @@
 
 		<main role="main" class="inner cover">
 			<h1 class="cover-heading">Success!</h1>
-			<p class="lead">${car.car.make}
-				${car.car.model} added to Inventory</p>
+			<p class="lead">${soldCar.car.make}
+				${soldCar.car.model} sold to ${soldCar.sale.firstName} ${soldCar.sale.lastName}</p>
 		</main>
 	</div>
 

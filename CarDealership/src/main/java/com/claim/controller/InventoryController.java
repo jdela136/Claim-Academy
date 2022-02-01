@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.claim.entity.Inventory;
+import com.claim.entity.Sale;
 import com.claim.service.InventoryService;
 
 @Controller
@@ -45,16 +47,18 @@ public class InventoryController {
 	
 	
 	@GetMapping("/inventory-car/{id}")
-	public ModelAndView showCarDetails(Model model, @PathVariable Integer id, HttpSession session) {
+	public ModelAndView showCarDetails(Model model, @PathVariable("id") Integer id, HttpSession session) {
 		Inventory inventoryCar = service.getInventoryCarbyId(id);
 		model.addAttribute("car", inventoryCar);
 		return new ModelAndView("/inventory-car", "inventoryCar", new Inventory());
 	}
 	
-	@PutMapping("/inventory-car/{id}")
-	public String bid(Model model, @ModelAttribute("inventoryCar") Inventory car, HttpSession session, @PathVariable Integer id) {
+	@PostMapping("/inventory-car/{id}")
+	public ModelAndView bid(Model model, @ModelAttribute("inventoryCar") Inventory car, HttpSession session, @PathVariable("id") Integer id) {
+		Inventory inventoryCar = service.getInventoryCarbyId(id);
 		service.bid(car.getPrice(), id);
-		return "/inventory-car/{id}";
+		model.addAttribute("car", inventoryCar);
+		return new ModelAndView("/inventory-car", "inventoryCar", new Inventory());
 	}
 	
 	@PostMapping("/inventory")
@@ -64,5 +68,25 @@ public class InventoryController {
 		return "show-cars-by-model";
 	}
 	
+	@GetMapping("/sell-car/{id}")
+	public ModelAndView sale(Model model, @PathVariable("id") Integer id) {
+		//Inventory inventoryCar = service.getInventoryCarbyId(id);
+		model.addAttribute("id", id);
+		return new ModelAndView("sell-car", "sale", new Sale());
+	}
 	
+	@PostMapping("/sell-car/{id}")
+	public String handleSale(Model model, @ModelAttribute("sale") Sale sale, HttpSession session, @PathVariable("id") Integer id) {	
+		Inventory inventoryCar = service.getInventoryCarbyId(id);
+		service.addSale(sale, id);
+		model.addAttribute("soldCar", inventoryCar);
+		return "sale-success";
+	}
+	
+	@GetMapping("/display-sales")
+	public String displaySales(Model model) {
+		List<Inventory> sales = service.getSales();
+		model.addAttribute("sales", sales);
+		return "display-sales";
+	}
 }
