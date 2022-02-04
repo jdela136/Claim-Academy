@@ -27,27 +27,32 @@ public class PlateAppearance {
 	@JoinColumn(name = "player_id")
 	private Player player;
 	
+	@Column(name = "strikes")
+	private Integer strikes;
+	
+	@Column(name = "balls")
+	private Integer balls;
+	
 	@Column(name = "base")
 	private Integer base;
 	
 	@Column(name = "outs")
 	private Integer outs;
 	
-	@Column(name = "runs_scored")
-	private Integer runsScored;
+	@Column(name = "away_index")
+	private Integer awayIndex;
 	
-	
-	@Column(name = "batting_order")
-	private Integer battingOrder;
+	@Column(name = "home_index")
+	private Integer homeIndex;
 	
 	@Column(name = "inning_num")
 	private Integer inningNum;
 	
 	@Column(name = "in_play")
-	private Integer inPlay;
+	private Boolean inPlay;
 	
-	@Column(name = "end_pa")
-	private Boolean endPa;
+	@Column(name = "end_game")
+	private Boolean endGame;
 	
 	public PlateAppearance() {}
 
@@ -90,21 +95,22 @@ public class PlateAppearance {
 	public void setOuts(Integer outs) {
 		this.outs = outs;
 	}
+	
 
-	public Integer getRunsScored() {
-		return runsScored;
+	public Integer getAwayIndex() {
+		return awayIndex;
 	}
 
-	public void setRunsScored(Integer runsScored) {
-		this.runsScored = runsScored;
+	public void setAwayIndex(Integer awayIndex) {
+		this.awayIndex = awayIndex;
 	}
 
-	public Integer getBattingOrder() {
-		return battingOrder;
+	public Integer getHomeIndex() {
+		return homeIndex;
 	}
 
-	public void setBattingOrder(Integer battingOrder) {
-		this.battingOrder = battingOrder;
+	public void setHomeIndex(Integer homeIndex) {
+		this.homeIndex = homeIndex;
 	}
 
 	public Integer getInningNum() {
@@ -115,21 +121,43 @@ public class PlateAppearance {
 		this.inningNum = inningNum;
 	}
 
-	public Integer getInPlay() {
+	public Boolean getInPlay() {
 		return inPlay;
 	}
 
-	public void setInPlay(Integer inPlay) {
+	public void setInPlay(Boolean inPlay) {
 		this.inPlay = inPlay;
 	}
 
-	public Boolean isEndPa() {
-		return endPa;
+	public Integer getStrikes() {
+		return strikes;
 	}
 
-	public void setEndPa(Boolean endPa) {
-		this.endPa = endPa;
+	public void setStrikes(Integer strikes) {
+		this.strikes = strikes;
 	}
-	
+
+	public Integer getBalls() {
+		return balls;
+	}
+
+	public void setBalls(Integer balls) {
+		this.balls = balls;
+	}
+
+	public Boolean getEndGame() {
+		return endGame;
+	}
+
+	public void setEndGame(Boolean endGame) {
+		this.endGame = endGame;
+	}
+
+	public void endPlateAppearance() {
+		getPlayer().getStats().setAtBats(getPlayer().getStats().getAtBats()  + 1);
+		getPlayer().getStats().setAverage(getPlayer().getStats().getAverage());
+		getPlayer().getStats().setSlugging(getPlayer().getStats().getSlugging());
+		getPlayer().getStats().setObp(getPlayer().getStats().getObp());
+	}
 	
 }

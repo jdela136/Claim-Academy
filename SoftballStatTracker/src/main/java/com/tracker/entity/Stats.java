@@ -85,6 +85,7 @@ public class Stats {
 	}
 
 	public Double getAverage() {
+		average = (double) (hits / atBats);
 		return average;
 	}
 
@@ -93,6 +94,7 @@ public class Stats {
 	}
 
 	public Double getObp() {
+		obp = (double) ((hits + walks) / paCount);
 		return obp;
 	}
 
@@ -101,6 +103,7 @@ public class Stats {
 	}
 
 	public Double getSlugging() {
+		slugging = (double) ((singles + (2 * doubles) + (3 * triples) + (4 * homeruns))/ atBats);
 		return slugging;
 	}
 

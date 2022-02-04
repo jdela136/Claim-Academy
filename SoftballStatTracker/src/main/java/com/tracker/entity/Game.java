@@ -2,28 +2,38 @@ package com.tracker.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="game")
 public class Game {
 	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
     @Column(name = "id")
 	private Integer id;
 	
-	@ManyToMany
-	@JoinColumn(name = "team_id")
-	private Team team;
+//	@Column(name = "game_id")
+//	private Integer gameId;
 	
-	@Column(name = "score")
-	private Integer score;
+	@ManyToOne
+	@JoinColumn(name = "home_team_id")
+	private Team homeTeam;
 	
-	@Column(name = "end_Game")
-	private Boolean endGame;
+	@ManyToOne
+	@JoinColumn(name = "away_team_id")
+	private Team awayTeam;
+	
+	@Column(name = "home_score")
+	private Integer homeScore;
+	
+	@Column(name = "away_score")
+	private Integer awayScore;
 	
 	public Game() {}
 
@@ -34,29 +44,47 @@ public class Game {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
+//	public Integer getGameId() {
+//		return gameId;
+//	}
+//
+//	public void setGameId(Integer gameId) {
+//		this.gameId = gameId;
+//	}
 
-	public Team getTeam() {
-		return team;
+	public Team getAwayTeam() {
+		return awayTeam;
 	}
 
-	public void setTeam(Team team) {
-		this.team = team;
+	public void setAwayTeam(Team awayTeam) {
+		this.awayTeam = awayTeam;
 	}
 
-	public Integer getScore() {
-		return score;
+	public Integer getAwayScore() {
+		return awayScore;
 	}
 
-	public void setScore(Integer score) {
-		this.score = score;
+	public void setAwayScore(Integer score) {
+		this.awayScore = score;
 	}
 
-	public Boolean getEndGame() {
-		return endGame;
+	public Team getHomeTeam() {
+		return homeTeam;
 	}
 
-	public void setEndGame(Boolean endGame) {
-		this.endGame = endGame;
+	public void setHomeTeam(Team homeTeam) {
+		this.homeTeam = homeTeam;
 	}
+
+	public Integer getHomeScore() {
+		return homeScore;
+	}
+
+	public void setHomeScore(Integer homeScore) {
+		this.homeScore = homeScore;
+	}
+	
+	
 	
 }

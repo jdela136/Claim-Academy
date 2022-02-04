@@ -1,13 +1,297 @@
 package com.tracker.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tracker.entity.Game;
+import com.tracker.entity.PlateAppearance;
+import com.tracker.entity.Player;
+import com.tracker.entity.Team;
+import com.tracker.repository.GameRepository;
 import com.tracker.repository.PlateAppearanceRepository;
+import com.tracker.repository.PlayerRepository;
+import com.tracker.repository.TeamRepository;
 
 @Service
 public class PlateAppearanceService {
+
+	@Autowired
+	PlateAppearanceRepository paRepository;
+
+	@Autowired
+	PlayerRepository playerRepository;
 	
 	@Autowired
-	PlateAppearanceRepository repository;
+	TeamRepository teamRepository;
+	
+	@Autowired
+	GameRepository gameRepository;
+
+	public void startGame(Integer awayId, Integer homeId) {
+		Team dbAway = teamRepository.findById(awayId).get();
+		Team dbHome = teamRepository.findById(homeId).get();
+		Game game = new Game();
+		game.setAwayTeam(dbAway);
+		game.setHomeTeam(dbHome);
+		game.setAwayScore(0);
+		game.setHomeScore(0);
+		
+		gameRepository.save(game);
+
+		PlateAppearance pa = new PlateAppearance();
+		pa.setGame(game);
+		pa.setAwayIndex(1);
+		pa.setHomeIndex(1);
+		pa.setStrikes(1);
+		pa.setBalls(1);
+		pa.setEndGame(false);
+		pa.setInningNum(1);
+		pa.setOuts(0);
+		pa.setBase(0);
+		
+//		playerRepository.findTopByOrderByIdDesc();
+		pa.setPlayer(playerRepository.findTopPlayerByTeamIdAndLineUpId(awayId, 1).get());
+		pa.getPlayer().getStats().setPaCount(pa.getPlayer().getStats().getPaCount() + 1);
+		paRepository.save(pa);
+	}
+
+	public void startPA(Integer gameId) {
+		List<PlateAppearance> pas = paRepository.getPAsByGameIdDesc(gameId).get();
+		PlateAppearance lastPA = pas.get(0);
+		int totalOuts = lastPA.getOuts();
+		PlateAppearance newAtBat = new PlateAppearance();
+
+		newAtBat.setGame(lastPA.getGame());
+		newAtBat.setBalls(1);
+		newAtBat.setStrikes(1);
+		newAtBat.setBase(0);
+		newAtBat.setEndGame(false);
+
+		if (totalOuts < 3) {
+			newAtBat.setHomeIndex(lastPA.getHomeIndex());
+			if (lastPA.getAwayIndex() == 12) {
+				newAtBat.setAwayIndex(1);
+			} else {
+				newAtBat.setAwayIndex(lastPA.getAwayIndex() + 1);
+			}
+			newAtBat.setPlayer(playerRepository
+					.findTopPlayerByTeamIdAndLineUpId(lastPA.getGame().getAwayTeam().getId(), newAtBat.getAwayIndex())
+					.get());
+			newAtBat.getPlayer().getStats().setPaCount(newAtBat.getPlayer().getStats().getPaCount() + 1);
+			newAtBat.setOuts(lastPA.getOuts());
+			newAtBat.setInningNum(lastPA.getInningNum());
+		}
+		if (totalOuts == 3) {
+			clearBasePath(gameId);
+			if (lastPA.getInningNum() == 1) {
+				newAtBat.setHomeIndex(1);
+			} else {
+				if (lastPA.getHomeIndex() == 12) {
+					newAtBat.setHomeIndex(1);
+				} else {
+					newAtBat.setHomeIndex(lastPA.getHomeIndex() + 1);
+				}
+			}
+			newAtBat.setAwayIndex(lastPA.getAwayIndex());
+			newAtBat.setPlayer(playerRepository
+					.findTopPlayerByTeamIdAndLineUpId(lastPA.getGame().getHomeTeam().getId(), newAtBat.getHomeIndex())
+					.get());
+			newAtBat.getPlayer().getStats().setPaCount(newAtBat.getPlayer().getStats().getPaCount() + 1);
+			newAtBat.setOuts(lastPA.getOuts());
+			newAtBat.setInningNum(lastPA.getInningNum());
+		}
+		if (totalOuts == 4 || totalOuts == 5) {
+
+			if (lastPA.getHomeIndex() == 12) {
+				newAtBat.setHomeIndex(1);
+			} else {
+				newAtBat.setHomeIndex(lastPA.getHomeIndex() + 1);
+			}
+			newAtBat.setAwayIndex(lastPA.getAwayIndex());
+			newAtBat.setPlayer(playerRepository
+					.findTopPlayerByTeamIdAndLineUpId(lastPA.getGame().getHomeTeam().getId(), newAtBat.getHomeIndex())
+					.get());
+			newAtBat.getPlayer().getStats().setPaCount(newAtBat.getPlayer().getStats().getPaCount() + 1);
+			newAtBat.setOuts(lastPA.getOuts());
+			newAtBat.setInningNum(lastPA.getInningNum());
+		}
+		if (totalOuts == 6) {
+			clearBasePath(gameId);
+			newAtBat.setHomeIndex(lastPA.getHomeIndex());
+			if (lastPA.getAwayIndex() == 12) {
+				newAtBat.setAwayIndex(1);
+			} else {
+				newAtBat.setAwayIndex(lastPA.getAwayIndex() + 1);
+			}
+			newAtBat.setPlayer(playerRepository
+					.findTopPlayerByTeamIdAndLineUpId(lastPA.getGame().getAwayTeam().getId(), newAtBat.getAwayIndex())
+					.get());
+			newAtBat.getPlayer().getStats().setPaCount(newAtBat.getPlayer().getStats().getPaCount() + 1);
+			newAtBat.setOuts(0);
+			newAtBat.setInningNum(lastPA.getInningNum() + 1);
+		}
+		paRepository.save(newAtBat);
+	}
+
+	public void moveRunner(Integer gameId, Integer startingBase, Integer endingBase) {
+		PlateAppearance pa = paRepository.getPAByBase(gameId, startingBase).get().get(0);
+		if(startingBase == 0) {
+			if (endingBase > 3) {
+				pa.setBase(4);
+				pa.getPlayer().getStats().setRbis(pa.getPlayer().getStats().getRbis() + 1);
+				pa.getPlayer().getStats().setRuns(pa.getPlayer().getStats().getRuns() + 1);
+			}
+			else {
+				pa.setBase(endingBase);
+			}
+		}
+		else {
+			if (endingBase > 3) {
+				pa.setBase(4);
+				pa.getPlayer().getStats().setRuns(pa.getPlayer().getStats().getRuns() + 1);
+				List<PlateAppearance> pas = paRepository.getPAsByGameIdDesc(gameId).get();
+				PlateAppearance batter = pas.get(0);
+				batter.getPlayer().getStats().setRbis(batter.getPlayer().getStats().getRbis() + 1);
+				paRepository.save(batter);
+			}
+			else {
+				pa.setBase(endingBase);
+			}
+		}
+		paRepository.save(pa);
+	}
+	
+	public void moveAllRunners(Integer gameId, Integer bases) {
+		List<PlateAppearance> onBase = paRepository.getPAsOnBase(gameId).get();
+		List<PlateAppearance> pas = paRepository.getPAsByGameIdDesc(gameId).get();
+		PlateAppearance batter = pas.get(0);
+		onBase.add(batter);
+		for (PlateAppearance pa : onBase) {
+			if (pa.getBase() == bases) {
+				moveRunner(gameId, pa.getBase(), pa.getBase() + 1);
+			}
+			if (pa.getBase() < bases) {
+				moveRunner(gameId, pa.getBase(), pa.getBase() + bases);
+			}
+			paRepository.save(pa);
+		}
+	}
+
+	public void addStrike(Integer gameId) {
+		List<PlateAppearance> pas = paRepository.getPAsByGameIdDesc(gameId).get();
+		PlateAppearance pa = pas.get(0);
+		if (pa.getBase() == null) {
+			pa.setStrikes(pa.getStrikes() + 1);
+			if (pa.getStrikes() == 3) {
+				pa.setBase(5);
+				pa.getPlayer().getStats().setStrikeouts(pa.getPlayer().getStats().getStrikeouts() + 1);
+				pa.endPlateAppearance();
+				pa.setOuts(pa.getOuts() + 1);
+				startPA(gameId);
+			}
+			paRepository.save(pa);
+		} else {
+			startPA(gameId);
+			pas = paRepository.getPAsByGameIdDesc(gameId).get();
+			pa = pas.get(0);
+			pa.setStrikes(2);
+			paRepository.save(pa);
+		}
+	}
+
+	public void addBall(Integer gameId) {
+		List<PlateAppearance> pas = paRepository.getPAsByGameIdDesc(gameId).get();
+		PlateAppearance pa = pas.get(0);
+		if (pa.getBase() == null) {
+			pa.setBalls(pa.getBalls() + 1);
+			if (pa.getBalls() == 4) {
+				moveRunner(gameId, 0, 1);
+				pa.getPlayer().getStats().setWalks(pa.getPlayer().getStats().getWalks() + 1);
+				pa.endPlateAppearance();
+				startPA(gameId);
+			}
+			paRepository.save(pa);
+		} else {
+			startPA(gameId);
+			pas = paRepository.getPAsByGameIdDesc(gameId).get();
+			pa = pas.get(0);
+			pa.setStrikes(2);
+			paRepository.save(pa);
+		}
+	}
+
+	public void endGame(Integer gameId) {
+		List<PlateAppearance> pas = paRepository.getPAsByGameIdDesc(gameId).get();
+		PlateAppearance pa = pas.get(0);
+		Game game = pa.getGame();
+		if (game.getAwayScore() > game.getHomeScore()) {
+			game.getAwayTeam().setWins(game.getAwayTeam().getWins() + 1);
+			game.getHomeTeam().setLosses(game.getHomeTeam().getLosses() + 1);
+		} else {
+			game.getHomeTeam().setWins(game.getHomeTeam().getWins() + 1);
+			game.getAwayTeam().setLosses(game.getAwayTeam().getLosses() + 1);
+		}
+		pa.setEndGame(true);
+		paRepository.save(pa);
+	}
+	
+	public void clearBasePath(Integer gameId) {
+		List<PlateAppearance> onBase = paRepository.getPAsOnBase(gameId).get();
+		for(PlateAppearance pa : onBase) {
+			pa.setBase(null);
+			paRepository.save(pa);
+		}
+	}
+	
+	public void ballInPlay(Integer gameId) {
+		List<PlateAppearance> pas = paRepository.getPAsByGameIdDesc(gameId).get();
+		PlateAppearance pa = pas.get(0);
+		pa.setInPlay(true);
+		paRepository.save(pa);
+	}
+	
+	public void outOnPlay(Integer gameId) {
+		List<PlateAppearance> pas = paRepository.getPAsByGameIdDesc(gameId).get();
+		PlateAppearance pa = pas.get(0);
+		pa.setBase(5);
+		pa.endPlateAppearance();
+		pa.setOuts(pa.getOuts() + 1);
+		paRepository.save(pa);
+		startPA(gameId);
+	}
+	
+	public void baseHit(Integer gameId, Integer bases) {
+		List<PlateAppearance> pas = paRepository.getPAsByGameIdDesc(gameId).get();
+		PlateAppearance pa = pas.get(0);
+		Player batter = pa.getPlayer();
+
+		switch (bases) {
+		case 1:
+			moveAllRunners(gameId, 1);
+			batter.getStats().setSingles(batter.getStats().getSingles() + 1);
+			batter.getStats().setHits(batter.getStats().getHits() + 1);
+			break;
+		case 2:
+			moveAllRunners(gameId, 2);
+			batter.getStats().setDoubles(batter.getStats().getDoubles() + 1);
+			batter.getStats().setHits(batter.getStats().getHits() + 1);
+			break;
+		case 3:
+			moveAllRunners(gameId, 3);
+			batter.getStats().setTriples(batter.getStats().getTriples() + 1);
+			batter.getStats().setHits(batter.getStats().getHits() + 1);
+			break;
+		case 4:
+			moveAllRunners(gameId, 4);
+			batter.getStats().setHomeruns(batter.getStats().getHomeruns() + 1);
+			batter.getStats().setHits(batter.getStats().getHits() + 1);
+			break;
+		}
+		pa.endPlateAppearance();
+		startPA(gameId);
+		paRepository.save(pa);
+	}
 }

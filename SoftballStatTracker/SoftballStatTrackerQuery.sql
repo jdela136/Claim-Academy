@@ -59,37 +59,36 @@ create table player (
 );
 
 create table game (
-	id int not null,
-    team_id int not null,
-    score int,
-    end_game boolean,
+	id int not null auto_increment,
+    home_team_id int not null,
+    away_team_id int not null,
+    away_score int,
+    home_score int,
     primary key(id),
-    foreign key(team_id) references team(id)
+    foreign key(home_team_id) references team(id),
+    foreign key(away_team_id) references team(id)
 );
 
 create table plate_appearance (
 	id int not null auto_increment,
     game_id int,
     player_id int not null,
-    base int not null,
+    strikes int,
+    balls int,
+    base int,
     outs int,
-    runsScored int,
-    batting_order int,
     inning_num int,
+    home_index int,
+    away_index int,
     in_play boolean,
-    end_pa boolean,
+    end_game boolean,
     primary key (id),
     foreign key(game_id) references game(id),
     foreign key(player_id) references player(id)
 );
 
-create table pitch (
-	id int not null auto_increment,
-    plate_appearance_id int,
-    strikes int,
-    balls int,
-    primary key(id),
-    foreign key(plate_appearance_id) references plate_appearance(id)
-);
 
-
+insert into commissioner(first_name,last_name) value ('Jonathan','De La Cruz');
+insert into league(league_name, commissioner_id) value ('DPR', 1);
+insert into team(team_name, league_id) value ('Yankees', 1);
+insert into team(team_name, league_id) value ('Red Sox', 1);
