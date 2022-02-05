@@ -19,7 +19,7 @@ public interface PlayerRepository extends JpaRepository<Player, Integer>{
 	public Optional<Player> findTopPlayerByTeamIdAndLineUpId(Integer teamId, Integer lineupId);
 	
 	@Query("SELECT P FROM Player P WHERE P.team.id = ?1 ORDER BY P.lineupId")
-	public Optional<List<Player>> findlineUp(Integer teamId);
+	public Optional<List<Player>> findLineUp(Integer teamId);
 
 //	public void findTopByOrderByTe();
 }

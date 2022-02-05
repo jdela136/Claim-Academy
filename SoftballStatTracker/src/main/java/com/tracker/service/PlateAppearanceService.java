@@ -61,6 +61,10 @@ public class PlateAppearanceService {
 	public void startPA(Integer gameId) {
 		List<PlateAppearance> pas = paRepository.getPAsByGameIdDesc(gameId).get();
 		PlateAppearance lastPA = pas.get(0);
+		
+		List<Player> away= playerRepository.findLineUp(lastPA.getGame().getAwayTeam().getId()).get();
+		List<Player> home= playerRepository.findLineUp(lastPA.getGame().getHomeTeam().getId()).get();
+		
 		int totalOuts = lastPA.getOuts();
 		PlateAppearance newAtBat = new PlateAppearance();
 
@@ -72,14 +76,12 @@ public class PlateAppearanceService {
 
 		if (totalOuts < 3) {
 			newAtBat.setHomeIndex(lastPA.getHomeIndex());
-			if (lastPA.getAwayIndex() == 12) {
+			if (lastPA.getAwayIndex() == away.size()) {
 				newAtBat.setAwayIndex(1);
 			} else {
 				newAtBat.setAwayIndex(lastPA.getAwayIndex() + 1);
 			}
-			newAtBat.setPlayer(playerRepository
-					.findTopPlayerByTeamIdAndLineUpId(lastPA.getGame().getAwayTeam().getId(), newAtBat.getAwayIndex())
-					.get());
+			newAtBat.setPlayer(away.get(newAtBat.getAwayIndex() - 1));
 			newAtBat.getPlayer().getStats().setPaCount(newAtBat.getPlayer().getStats().getPaCount() + 1);
 			newAtBat.setOuts(lastPA.getOuts());
 			newAtBat.setInningNum(lastPA.getInningNum());
@@ -89,31 +91,27 @@ public class PlateAppearanceService {
 			if (lastPA.getInningNum() == 1) {
 				newAtBat.setHomeIndex(1);
 			} else {
-				if (lastPA.getHomeIndex() == 12) {
+				if (lastPA.getHomeIndex() == home.size()) {
 					newAtBat.setHomeIndex(1);
 				} else {
 					newAtBat.setHomeIndex(lastPA.getHomeIndex() + 1);
 				}
 			}
 			newAtBat.setAwayIndex(lastPA.getAwayIndex());
-			newAtBat.setPlayer(playerRepository
-					.findTopPlayerByTeamIdAndLineUpId(lastPA.getGame().getHomeTeam().getId(), newAtBat.getHomeIndex())
-					.get());
+			newAtBat.setPlayer(home.get(newAtBat.getHomeIndex() - 1));
 			newAtBat.getPlayer().getStats().setPaCount(newAtBat.getPlayer().getStats().getPaCount() + 1);
 			newAtBat.setOuts(lastPA.getOuts());
 			newAtBat.setInningNum(lastPA.getInningNum());
 		}
 		if (totalOuts == 4 || totalOuts == 5) {
 
-			if (lastPA.getHomeIndex() == 12) {
+			if (lastPA.getHomeIndex() == home.size()) {
 				newAtBat.setHomeIndex(1);
 			} else {
 				newAtBat.setHomeIndex(lastPA.getHomeIndex() + 1);
 			}
 			newAtBat.setAwayIndex(lastPA.getAwayIndex());
-			newAtBat.setPlayer(playerRepository
-					.findTopPlayerByTeamIdAndLineUpId(lastPA.getGame().getHomeTeam().getId(), newAtBat.getHomeIndex())
-					.get());
+			newAtBat.setPlayer(home.get(newAtBat.getHomeIndex() - 1));
 			newAtBat.getPlayer().getStats().setPaCount(newAtBat.getPlayer().getStats().getPaCount() + 1);
 			newAtBat.setOuts(lastPA.getOuts());
 			newAtBat.setInningNum(lastPA.getInningNum());
@@ -121,14 +119,12 @@ public class PlateAppearanceService {
 		if (totalOuts == 6) {
 			clearBasePath(gameId);
 			newAtBat.setHomeIndex(lastPA.getHomeIndex());
-			if (lastPA.getAwayIndex() == 12) {
+			if (lastPA.getAwayIndex() == away.size()) {
 				newAtBat.setAwayIndex(1);
 			} else {
 				newAtBat.setAwayIndex(lastPA.getAwayIndex() + 1);
 			}
-			newAtBat.setPlayer(playerRepository
-					.findTopPlayerByTeamIdAndLineUpId(lastPA.getGame().getAwayTeam().getId(), newAtBat.getAwayIndex())
-					.get());
+			newAtBat.setPlayer(away.get(newAtBat.getAwayIndex() - 1));
 			newAtBat.getPlayer().getStats().setPaCount(newAtBat.getPlayer().getStats().getPaCount() + 1);
 			newAtBat.setOuts(0);
 			newAtBat.setInningNum(lastPA.getInningNum() + 1);
@@ -143,6 +139,12 @@ public class PlateAppearanceService {
 				pa.setBase(4);
 				pa.getPlayer().getStats().setRbis(pa.getPlayer().getStats().getRbis() + 1);
 				pa.getPlayer().getStats().setRuns(pa.getPlayer().getStats().getRuns() + 1);
+				if(pa.getOuts() < 4) {
+					pa.getGame().setAwayScore(pa.getGame().getAwayScore() + 1);
+				}
+				else {
+					pa.getGame().setHomeScore(pa.getGame().getHomeScore() + 1);
+				}
 			}
 			else {
 				pa.setBase(endingBase);
@@ -156,6 +158,12 @@ public class PlateAppearanceService {
 				PlateAppearance batter = pas.get(0);
 				batter.getPlayer().getStats().setRbis(batter.getPlayer().getStats().getRbis() + 1);
 				paRepository.save(batter);
+				if(pa.getOuts() < 4) {
+					pa.getGame().setAwayScore(pa.getGame().getAwayScore() + 1);
+				}
+				else {
+					pa.getGame().setHomeScore(pa.getGame().getHomeScore() + 1);
+				}
 			}
 			else {
 				pa.setBase(endingBase);
@@ -166,10 +174,20 @@ public class PlateAppearanceService {
 	
 	public void moveAllRunners(Integer gameId, Integer bases) {
 		List<PlateAppearance> onBase = paRepository.getPAsOnBase(gameId).get();
-		List<PlateAppearance> pas = paRepository.getPAsByGameIdDesc(gameId).get();
-		PlateAppearance batter = pas.get(0);
-		onBase.add(batter);
-		for (PlateAppearance pa : onBase) {
+//		for (PlateAppearance pa : onBase) {
+//			if (pa.getBase() == bases) {
+//				moveRunner(gameId, pa.getBase(), pa.getBase() + 1);
+//			}
+//			if (pa.getBase() < bases) {
+//				moveRunner(gameId, pa.getBase(), pa.getBase() + bases);
+//			}
+//			paRepository.save(pa);
+//		}
+		for(int i = 0; i < onBase.size(); i++) {
+			PlateAppearance pa =  onBase.get(i);
+			if(pa.getBase() == 3 && onBase.get(i+1).getBase() == 2) {
+				moveRunner(gameId, pa.getBase(), 4);
+			}
 			if (pa.getBase() == bases) {
 				moveRunner(gameId, pa.getBase(), pa.getBase() + 1);
 			}
@@ -183,7 +201,7 @@ public class PlateAppearanceService {
 	public void addStrike(Integer gameId) {
 		List<PlateAppearance> pas = paRepository.getPAsByGameIdDesc(gameId).get();
 		PlateAppearance pa = pas.get(0);
-		if (pa.getBase() == null) {
+		if (pa.getBase() == 0) {
 			pa.setStrikes(pa.getStrikes() + 1);
 			if (pa.getStrikes() == 3) {
 				pa.setBase(5);
@@ -205,7 +223,7 @@ public class PlateAppearanceService {
 	public void addBall(Integer gameId) {
 		List<PlateAppearance> pas = paRepository.getPAsByGameIdDesc(gameId).get();
 		PlateAppearance pa = pas.get(0);
-		if (pa.getBase() == null) {
+		if (pa.getBase() == 0) {
 			pa.setBalls(pa.getBalls() + 1);
 			if (pa.getBalls() == 4) {
 				moveRunner(gameId, 0, 1);
