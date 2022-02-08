@@ -54,6 +54,16 @@ public class PlateAppearance {
 	@Column(name = "end_game")
 	private Boolean endGame;
 	
+	@Column(name = "away_hits")
+	private Integer awayHits;
+	
+	@Column(name = "home_hits")
+	private Integer homeHits;
+	
+	@Column(name = "runs")
+	private Integer runs;
+	
+	
 	public PlateAppearance() {}
 
 	public Integer getId() {
@@ -151,6 +161,32 @@ public class PlateAppearance {
 
 	public void setEndGame(Boolean endGame) {
 		this.endGame = endGame;
+	}
+	
+	
+
+	public Integer getAwayHits() {
+		return awayHits;
+	}
+
+	public void setAwayHits(Integer awayHits) {
+		this.awayHits = awayHits;
+	}
+
+	public Integer getHomeHits() {
+		return homeHits;
+	}
+
+	public void setHomeHits(Integer homeHits) {
+		this.homeHits = homeHits;
+	}
+
+	public Integer getRuns() {
+		return runs;
+	}
+
+	public void setRuns(Integer runs) {
+		this.runs = runs;
 	}
 
 	public void endPlateAppearance() {

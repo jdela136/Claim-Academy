@@ -92,3 +92,8 @@ insert into commissioner(first_name,last_name) value ('Jonathan','De La Cruz');
 insert into league(league_name, commissioner_id) value ('DPR', 1);
 insert into team(team_name, league_id) value ('Yankees', 1);
 insert into team(team_name, league_id) value ('Red Sox', 1);
+
+
+alter table plate_appearance add column away_hits int;
+alter table plate_appearance add column home_hits int;
+alter table plate_appearance add column runs int;

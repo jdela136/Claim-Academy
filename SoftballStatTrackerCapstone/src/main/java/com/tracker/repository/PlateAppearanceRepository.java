@@ -20,14 +20,14 @@ public interface PlateAppearanceRepository extends JpaRepository<PlateAppearance
 //	public Optional<PlateAppearance> getlastPAByGameId(Integer gameId);
 	
 	@Query("SELECT P FROM PlateAppearance P WHERE P.game.id = ?1 ORDER BY P.id DESC")
-	public Optional<List<PlateAppearance>> getPAsByGameIdDesc(Integer gameId);
+	public List<Optional<PlateAppearance>> getPAsByGameIdDesc(Integer gameId);
 	
 	@Query("SELECT P FROM PlateAppearance P WHERE P.game.id = ?1")
-	public Optional<List<PlateAppearance>> getPAsByGameId(Integer gameId);
+	public List<Optional<PlateAppearance>> getPAsByGameId(Integer gameId);
 	
 	@Query("SELECT P FROM PlateAppearance P WHERE P.game.id = ?1 AND P.base = ?2")
-	public Optional<List<PlateAppearance>> getPAByBase(Integer gameId, Integer base);
+	public List<Optional<PlateAppearance>> getPAByBase(Integer gameId, Integer base);
 	
-	@Query("SELECT P FROM PlateAppearance P WHERE P.base != 5 OR P.base != 4 AND P.base IS NOT NULL AND P.game.id = ?1 ORDER BY P.base DESC")
-	public Optional<List<PlateAppearance>> getPAsOnBase(Integer gameId);
+	@Query("SELECT P FROM PlateAppearance P WHERE P.base != 5 AND P.base != 4 AND P.base IS NOT NULL AND P.game.id = ?1 ORDER BY P.base DESC")
+	public List<Optional<PlateAppearance>> getPAsOnBase(Integer gameId);
 }
