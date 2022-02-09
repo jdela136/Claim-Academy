@@ -35,7 +35,7 @@ public class TeamController {
 		return new ResponseEntity<>(service.findTeams(), HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/leagues/{leagueId}/teams", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
+	@RequestMapping(value = "/teams", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.GET)
 	public ResponseEntity<List<Optional<Team>>> findTeamsByLeagueId(Integer leagueId) {
 		return new ResponseEntity<>(service.findTeamsByLeagueId(leagueId), HttpStatus.OK);
 	}
