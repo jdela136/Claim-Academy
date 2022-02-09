@@ -1,6 +1,7 @@
 package com.tracker.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -25,5 +26,13 @@ public class LeagueService {
 	
 	public List<League> findLeagues() {
 		return repository.findAll();
+	}
+	
+	public Optional<League> getLeagueByCommisionerEmail(String email) {
+		return repository.getLeagueByCommisionerEmail(email);
+	}
+	
+	public Optional<League> getLeagueById(Integer id) {
+		return repository.findById(id);
 	}
 }

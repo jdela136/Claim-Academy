@@ -242,10 +242,10 @@ public class GameService {
 			if (pa.getBalls() == 4) {
 				moveRunner(gameId, 0, 1);
 				pa.getPlayer().getStats().setWalks(pa.getPlayer().getStats().getWalks() + 1);
-				pa.endPlateAppearance();
 				startPA(gameId);
 			}
 			paRepository.save(pa);
+			pa.endPlateAppearance();
 		} else {
 			startPA(gameId);
 			pas = paRepository.getPAsByGameIdDesc(gameId);
@@ -328,7 +328,6 @@ public class GameService {
 				pa.setHomeHits(pas.get(1).get().getHomeHits() + 1);
 			}
 		}
-		pa.endPlateAppearance();
 		startPA(gameId);
 		paRepository.save(pa);
 		//paRepository.save(pas.get(1).get());
